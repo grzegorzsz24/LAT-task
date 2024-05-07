@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: DiscountCodesManager
+
+  datasource:
+    url: jdbc:h2:mem:test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
