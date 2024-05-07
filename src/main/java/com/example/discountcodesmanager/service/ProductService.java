@@ -13,7 +13,7 @@ public class ProductService {
 
     public Product saveProduct(Product product) throws BadRequestException {
         if (productRepository.findByName(product.getName()).isPresent()) {
-                throw new BadRequestException("Product " + product.getName() + " already exists");
+            throw new BadRequestException("Product " + product.getName() + " already exists");
         }
 
         return productRepository.save(product);
