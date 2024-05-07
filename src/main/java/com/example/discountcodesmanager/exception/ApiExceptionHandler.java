@@ -1,6 +1,5 @@
 package com.example.discountcodesmanager.exception;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,5 +18,17 @@ public class ApiExceptionHandler {
         );
 
         return new ResponseEntity<>(apiException, badRequest);
+    }
+
+    @ExceptionHandler(value = {ResourceNotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundException(ResourceNotFoundException e) {
+        HttpStatus notFound = HttpStatus.NOT_FOUND;
+
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                notFound
+        );
+
+        return new ResponseEntity<>(apiException, notFound);
     }
 }
