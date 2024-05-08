@@ -5,16 +5,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 public class PromoCode {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
     private LocalDateTime expirationDate;
-    private int discountAmount;
+    private BigDecimal discountAmount;
     private String discountCurrency;
     private Integer maxUsages;
     private Integer currentUsages;

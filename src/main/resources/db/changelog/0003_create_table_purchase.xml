@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="0003-1" author="Grzegorz">
+        <createTable tableName="purchase">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="purchase_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="regular_price" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discount_applied" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="promo_code_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="fk_purchase_promo_code"
+                             referencedTableName="promo_code"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="fk_purchase_product"
+                             referencedTableName="product"
+                             referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
