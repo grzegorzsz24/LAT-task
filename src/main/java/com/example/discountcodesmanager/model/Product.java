@@ -4,10 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @Entity
@@ -19,7 +20,8 @@ public class Product {
     @NotBlank(message = "Name is mandatory")
     private String name;
     private String description;
-    @NotEmpty(message = "Price is mandatory")
+    @NotNull(message = "Price is mandatory")
+    @DecimalMin(value = "0.0")
     private BigDecimal price;
     @NotBlank(message = "Currency is mandatory")
     private String currency;
