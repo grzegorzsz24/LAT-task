@@ -22,7 +22,7 @@ public class Product {
     private String description;
     @NotNull(message = "Price is mandatory")
     @DecimalMin(value = "0.0")
-    private BigDecimal price;
+    private BigDecimal regularPrice;
     @NotBlank(message = "Currency is mandatory")
     private String currency;
 }
