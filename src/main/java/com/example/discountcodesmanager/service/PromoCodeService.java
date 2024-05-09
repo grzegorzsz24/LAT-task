@@ -1,5 +1,6 @@
 package com.example.discountcodesmanager.service;
 
+import com.example.discountcodesmanager.dto.DiscountResponse;
 import com.example.discountcodesmanager.dto.PromoCodeRequest;
 import com.example.discountcodesmanager.dto.PromoCodeResponse;
 import com.example.discountcodesmanager.exception.BadRequestException;
@@ -44,7 +45,7 @@ public class PromoCodeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Promo code: " + code + ", not found"));
     }
 
-    public BigDecimal calculateDiscountedPrice(Long productId, String code) {
+    public DiscountResponse calculateDiscountedPrice(Long productId, String code) {
         Optional<Product> productOpt = productRepository.findById(productId);
         if (productOpt.isEmpty()) {
             throw new ResourceNotFoundException("Product with id: " + productId + ", not found");
@@ -59,20 +60,20 @@ public class PromoCodeService {
         Product product = productOpt.get();
 
         if (promoCode.getExpirationDate().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("Promo code has expired");
+            return new DiscountResponse(product.getRegularPrice(), "Warning: Promo code has expired");
         }
 
         if (!promoCode.getDiscountCurrency().equals(product.getCurrency())) {
-            throw new BadRequestException("Currency mismatch");
+            return new DiscountResponse(product.getRegularPrice(), "Warning: Currency mismatch");
         }
 
         if (promoCode.getCurrentUsages() >= promoCode.getMaxUsages()) {
-            throw new BadRequestException("Promo code usage limit reached");
+            return new DiscountResponse(product.getRegularPrice(), "Warning: Promo code usage limit reached");
         }
 
         BigDecimal discountAmount = promoCode.getDiscountAmount();
         BigDecimal discountedPrice = product.getRegularPrice().subtract(discountAmount);
-
-        return discountedPrice.compareTo(BigDecimal.ZERO) > 0 ? discountedPrice : BigDecimal.ZERO;
+        return new DiscountResponse(discountedPrice.compareTo(BigDecimal.ZERO) > 0 ? discountedPrice : BigDecimal.ZERO, "Discount price");
     }
+
 }

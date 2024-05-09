@@ -1,5 +1,6 @@
 package com.example.discountcodesmanager.controller;
 
+import com.example.discountcodesmanager.dto.DiscountResponse;
 import com.example.discountcodesmanager.dto.PromoCodeRequest;
 import com.example.discountcodesmanager.dto.PromoCodeResponse;
 import com.example.discountcodesmanager.service.PromoCodeService;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -34,9 +34,7 @@ public class PromoCodeController {
     }
 
     @GetMapping("/discount-price")
-    public ResponseEntity<?> getDiscountedPrice(@RequestParam Long productId, @RequestParam String promoCode) {
-        return ResponseEntity.ok(Collections.singletonMap(
-                "discountedPrice",
-                promoCodeService.calculateDiscountedPrice(productId, promoCode)));
+    public ResponseEntity<DiscountResponse> getDiscountedPrice(@RequestParam Long productId, @RequestParam String promoCode) {
+        return ResponseEntity.ok(promoCodeService.calculateDiscountedPrice(productId, promoCode));
     }
 }
