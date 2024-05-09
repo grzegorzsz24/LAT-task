@@ -1,7 +1,9 @@
 package com.example.discountcodesmanager.service;
 
+import com.example.discountcodesmanager.dto.ProductRequest;
 import com.example.discountcodesmanager.exception.BadRequestException;
 import com.example.discountcodesmanager.exception.ResourceNotFoundException;
+import com.example.discountcodesmanager.mapper.ProductRequestMapper;
 import com.example.discountcodesmanager.model.Product;
 import com.example.discountcodesmanager.repository.ProductRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,13 +22,14 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ObjectMapper objectMapper;
+    private final ProductRequestMapper productMapper;
 
-    public Product saveProduct(Product product) {
+    public Product saveProduct(ProductRequest product) {
         if (productRepository.findByName(product.getName()).isPresent()) {
             throw new BadRequestException("Product with name: " + product.getName() + ", already exists");
         }
 
-        return productRepository.save(product);
+        return productRepository.save(productMapper.map(product));
     }
 
     public List<Product> getAllProducts() {

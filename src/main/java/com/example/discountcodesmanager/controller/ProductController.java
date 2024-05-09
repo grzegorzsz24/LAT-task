@@ -1,5 +1,6 @@
 package com.example.discountcodesmanager.controller;
 
+import com.example.discountcodesmanager.dto.ProductRequest;
 import com.example.discountcodesmanager.model.Product;
 import com.example.discountcodesmanager.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,7 +22,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest product) {
         return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.CREATED);
     }
 
