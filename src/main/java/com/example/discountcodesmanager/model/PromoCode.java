@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Currency;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class PromoCode {
     private String code;
     private LocalDateTime expirationDate;
     private BigDecimal discountAmount;
-    private String discountCurrency;
+    private Currency discountCurrency;
     private Integer maxUsages;
     private Integer currentUsages;
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 @Entity
 @Getter
@@ -19,5 +20,5 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal regularPrice;
-    private String currency;
+    private Currency currency;
 }
