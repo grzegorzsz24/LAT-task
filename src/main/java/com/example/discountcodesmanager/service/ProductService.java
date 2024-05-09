@@ -1,9 +1,10 @@
 package com.example.discountcodesmanager.service;
 
 import com.example.discountcodesmanager.dto.ProductRequest;
+import com.example.discountcodesmanager.dto.ProductResponse;
 import com.example.discountcodesmanager.exception.BadRequestException;
 import com.example.discountcodesmanager.exception.ResourceNotFoundException;
-import com.example.discountcodesmanager.mapper.ProductRequestMapper;
+import com.example.discountcodesmanager.mapper.ProductMapper;
 import com.example.discountcodesmanager.model.Product;
 import com.example.discountcodesmanager.repository.ProductRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,32 +23,49 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ObjectMapper objectMapper;
-    private final ProductRequestMapper productMapper;
+    private final ProductMapper productMapper;
 
-    public Product saveProduct(ProductRequest product) {
+    public ProductResponse saveProduct(ProductRequest product) {
         if (productRepository.findByName(product.getName()).isPresent()) {
             throw new BadRequestException("Product with name: " + product.getName() + ", already exists");
         }
 
-        return productRepository.save(productMapper.map(product));
+        return ProductMapper.mapToResponse(productRepository.save(productMapper.mapFromRequest(product)));
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductMapper::mapToResponse)
+                .toList();
     }
 
-    public Optional<Product> findProductById(Long id) {
+    public Optional<ProductResponse> findProductById(Long id) {
         return Optional.ofNullable(productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + ", not found")));
+                .map(ProductMapper::mapToResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + ", not found"))
+        );
     }
 
-    public void updateProduct(Product productToUpdate) {
-        productRepository.save(productToUpdate);
+    public void updateProduct(ProductRequest productToUpdate) {
+        Product product = productMapper.mapFromRequest(productToUpdate);
+        product.setId(productRepository.findByName(productToUpdate.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + productToUpdate.getName() + ", not found"))
+                .getId());
+        productRepository.save(product);
     }
 
-    public Product applyPatch(Product product, JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {
-        JsonNode commentNode = objectMapper.valueToTree(product);
-        JsonNode commentPatchedNode = patch.apply(commentNode);
-        return objectMapper.treeToValue(commentPatchedNode, Product.class);
+    public void patchAndUpdateProduct(Long id, JsonMergePatch patch) throws JsonPatchException, JsonProcessingException, ResourceNotFoundException {
+        ProductResponse productResponse = findProductById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + ", not found"));
+
+        ProductRequest patchedProductRequest = applyPatch(productResponse, patch);
+        updateProduct(patchedProductRequest);
+    }
+
+    private ProductRequest applyPatch(ProductResponse product, JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {
+        JsonNode productNode = objectMapper.valueToTree(product);
+        JsonNode patchedProductNode = patch.apply(productNode);
+        return objectMapper.treeToValue(patchedProductNode, ProductRequest.class);
     }
 }

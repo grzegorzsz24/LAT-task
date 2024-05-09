@@ -1,6 +1,9 @@
 package com.example.discountcodesmanager.controller;
 
 import com.example.discountcodesmanager.dto.ProductRequest;
+import com.example.discountcodesmanager.dto.ProductResponse;
+import com.example.discountcodesmanager.exception.ResourceNotFoundException;
+import com.example.discountcodesmanager.mapper.ProductMapper;
 import com.example.discountcodesmanager.model.Product;
 import com.example.discountcodesmanager.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,27 +25,25 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest product) {
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest product) {
         return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody JsonMergePatch patch) {
         try {
-            Product product = productService.findProductById(id).orElseThrow();
-            Product productPatched = productService.applyPatch(product, patch);
-            productService.updateProduct(productPatched);
-
+            productService.patchAndUpdateProduct(id, patch);
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.internalServerError().build();
-        } catch (NoSuchElementException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
     }
+
 }
