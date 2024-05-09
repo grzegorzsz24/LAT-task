@@ -1,7 +1,10 @@
 package com.example.discountcodesmanager.service;
 
+import com.example.discountcodesmanager.dto.PromoCodeRequest;
+import com.example.discountcodesmanager.dto.PromoCodeResponse;
 import com.example.discountcodesmanager.exception.BadRequestException;
 import com.example.discountcodesmanager.exception.ResourceNotFoundException;
+import com.example.discountcodesmanager.mapper.PromoCodeMapper;
 import com.example.discountcodesmanager.model.Product;
 import com.example.discountcodesmanager.model.PromoCode;
 import com.example.discountcodesmanager.repository.ProductRepository;
@@ -19,21 +22,25 @@ import java.util.Optional;
 public class PromoCodeService {
     private final PromoCodeRepository promoCodeRepository;
     private final ProductRepository productRepository;
+    private final PromoCodeMapper promoCodeMapper;
 
-    public PromoCode savePromoCode(PromoCode promoCode) {
+    public PromoCodeResponse savePromoCode(PromoCodeRequest promoCode) {
         if (promoCodeRepository.findByCode(promoCode.getCode()).isPresent()) {
             throw new BadRequestException("Promo code: " + promoCode.getCode() + ", already exists");
         }
-
-        return promoCodeRepository.save(promoCode);
+        return PromoCodeMapper.mapToResponse(promoCodeRepository.save(promoCodeMapper.mapFromRequest(promoCode)));
     }
 
-    public List<PromoCode> getAllPromoCodes() {
-        return promoCodeRepository.findAll();
+    public List<PromoCodeResponse> getAllPromoCodes() {
+        return promoCodeRepository.findAll()
+                .stream()
+                .map(PromoCodeMapper::mapToResponse)
+                .toList();
     }
 
-    public PromoCode getPromoCodeDetailsByCode(String code) {
+    public PromoCodeResponse getPromoCodeDetailsByCode(String code) {
         return promoCodeRepository.findByCode(code)
+                .map(PromoCodeMapper::mapToResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Promo code: " + code + ", not found"));
     }
 

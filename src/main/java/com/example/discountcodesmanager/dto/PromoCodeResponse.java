@@ -1,21 +1,14 @@
-package com.example.discountcodesmanager.model;
+package com.example.discountcodesmanager.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
-public class PromoCode {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PromoCodeResponse {
     private Long id;
     private String code;
     private LocalDateTime expirationDate;

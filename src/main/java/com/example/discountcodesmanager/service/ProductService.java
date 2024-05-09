@@ -58,7 +58,6 @@ public class ProductService {
     public void patchAndUpdateProduct(Long id, JsonMergePatch patch) throws JsonPatchException, JsonProcessingException, ResourceNotFoundException {
         ProductResponse productResponse = findProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + ", not found"));
-
         ProductRequest patchedProductRequest = applyPatch(productResponse, patch);
         updateProduct(patchedProductRequest);
     }

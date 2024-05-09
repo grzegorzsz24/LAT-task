@@ -19,5 +19,4 @@ public class ProductMapper {
         BeanUtils.copyProperties(product, productResponse);
         return productResponse;
     }
-
 }

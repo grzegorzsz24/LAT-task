@@ -2,9 +2,6 @@ package com.example.discountcodesmanager.controller;
 
 import com.example.discountcodesmanager.dto.ProductRequest;
 import com.example.discountcodesmanager.dto.ProductResponse;
-import com.example.discountcodesmanager.exception.ResourceNotFoundException;
-import com.example.discountcodesmanager.mapper.ProductMapper;
-import com.example.discountcodesmanager.model.Product;
 import com.example.discountcodesmanager.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatchException;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/products")
@@ -40,8 +36,6 @@ public class ProductController {
             productService.patchAndUpdateProduct(id, patch);
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.internalServerError().build();
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
     }
