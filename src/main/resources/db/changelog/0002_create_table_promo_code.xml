@@ -9,13 +9,16 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="discount_type" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
             <column name="code" type="VARCHAR(24)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="expiration_date" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
-            <column name="discount_amount" type="DECIMAL">
+            <column name="discount_amount" type="DECIMAL(10, 2)">
                 <constraints nullable="false"/>
             </column>
             <column name="discount_currency" type="VARCHAR(50)">

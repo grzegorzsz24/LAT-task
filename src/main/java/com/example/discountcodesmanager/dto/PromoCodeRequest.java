@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class PromoCodeRequest {
+    @NotBlank(message = "Discount type is mandatory")
+    @Pattern(regexp = "FIXED|PERCENTAGE", message = "Invalid discount type. Allowed values are 'FIXED' or 'PERCENTAGE'")
+    private String discountType;
     @NotBlank(message = "Code is mandatory")
     @Pattern(regexp = "^[a-zA-Z0-9]{3,24}$",
             message = "Promo code must be 3-24 alphanumeric characters without whitespaces")

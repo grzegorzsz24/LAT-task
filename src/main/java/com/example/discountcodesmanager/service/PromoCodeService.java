@@ -6,6 +6,7 @@ import com.example.discountcodesmanager.dto.PromoCodeResponse;
 import com.example.discountcodesmanager.exception.BadRequestException;
 import com.example.discountcodesmanager.exception.ResourceNotFoundException;
 import com.example.discountcodesmanager.mapper.PromoCodeMapper;
+import com.example.discountcodesmanager.model.DiscountType;
 import com.example.discountcodesmanager.model.Product;
 import com.example.discountcodesmanager.model.PromoCode;
 import com.example.discountcodesmanager.repository.ProductRepository;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -70,10 +72,21 @@ public class PromoCodeService {
         if (promoCode.getCurrentUsages() >= promoCode.getMaxUsages()) {
             return new DiscountResponse(product.getRegularPrice(), "Warning: Promo code usage limit reached");
         }
+        BigDecimal discountedPrice = getBigDecimal(promoCode, product);
 
-        BigDecimal discountAmount = promoCode.getDiscountAmount();
-        BigDecimal discountedPrice = product.getRegularPrice().subtract(discountAmount);
-        return new DiscountResponse(discountedPrice.compareTo(BigDecimal.ZERO) > 0 ? discountedPrice : BigDecimal.ZERO, "Discount price");
+        return new DiscountResponse(discountedPrice.compareTo(BigDecimal.ZERO) > 0 ? discountedPrice : BigDecimal.ZERO, "Promo code applied successfully");
+    }
+
+    private static BigDecimal getBigDecimal(PromoCode promoCode, Product product) {
+        BigDecimal discountedPrice;
+        if (promoCode.getDiscountType() == DiscountType.PERCENTAGE) {
+            BigDecimal discountFactor = promoCode.getDiscountAmount().divide(BigDecimal.valueOf(100), 5, RoundingMode.HALF_UP);
+            BigDecimal discount = product.getRegularPrice().multiply(discountFactor);
+            discountedPrice = product.getRegularPrice().subtract(discount);
+        } else {
+            discountedPrice = product.getRegularPrice().subtract(promoCode.getDiscountAmount());
+        }
+        return discountedPrice.setScale(2, RoundingMode.HALF_UP);
     }
 
 }

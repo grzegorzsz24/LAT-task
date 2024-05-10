@@ -2,6 +2,7 @@ package com.example.discountcodesmanager.mapper;
 
 import com.example.discountcodesmanager.dto.PromoCodeRequest;
 import com.example.discountcodesmanager.dto.PromoCodeResponse;
+import com.example.discountcodesmanager.model.DiscountType;
 import com.example.discountcodesmanager.model.PromoCode;
 import com.example.discountcodesmanager.service.CurrencyService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class PromoCodeMapper {
         PromoCode promoCode = new PromoCode();
         BeanUtils.copyProperties(request, promoCode);
         promoCode.setDiscountCurrency(currencyService.getCurrency(request.getDiscountCurrency()).get());
+        promoCode.setDiscountType(DiscountType.valueOf(request.getDiscountType()));
         return promoCode;
     }
 
