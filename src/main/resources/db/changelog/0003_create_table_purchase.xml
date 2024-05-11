@@ -12,10 +12,10 @@
             <column name="purchase_date" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
-            <column name="regular_price" type="DECIMAL">
+            <column name="regular_price" type="DECIMAL(10, 2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="discount_applied" type="DECIMAL">
+            <column name="discount_applied" type="DECIMAL(10, 2)">
                 <constraints nullable="false"/>
             </column>
             <column name="promo_code_id" type="BIGINT">

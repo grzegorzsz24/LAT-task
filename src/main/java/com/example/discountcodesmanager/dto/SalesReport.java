@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SalesReportEntry {
+public class SalesReport {
     private String currency;
     private BigDecimal totalAmount;
     private BigDecimal totalDiscount;
-    private Integer numberOfPurchases;
+    private Long numberOfPurchases;
 }
