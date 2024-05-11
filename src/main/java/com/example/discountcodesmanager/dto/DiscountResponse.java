@@ -9,5 +9,6 @@ import java.math.BigDecimal;
 @Getter
 public class DiscountResponse {
     private BigDecimal price;
+    private String currency;
     private String message;
 }
