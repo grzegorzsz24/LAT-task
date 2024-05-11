@@ -1,6 +1,5 @@
 package com.example.discountcodesmanager.controller;
 
-import com.example.discountcodesmanager.dto.DiscountResponse;
 import com.example.discountcodesmanager.dto.PromoCodeRequest;
 import com.example.discountcodesmanager.dto.PromoCodeResponse;
 import com.example.discountcodesmanager.service.PromoCodeService;
@@ -31,10 +30,5 @@ public class PromoCodeController {
     @GetMapping("/{code}")
     public ResponseEntity<PromoCodeResponse> getPromoCodeDetails(@PathVariable String code) {
         return ResponseEntity.ok(promoCodeService.getPromoCodeDetailsByCode(code));
-    }
-
-    @GetMapping("/discount-price")
-    public ResponseEntity<DiscountResponse> getDiscountedPrice(@RequestParam Long productId, @RequestParam String promoCode) {
-        return ResponseEntity.ok(promoCodeService.calculateDiscountedPrice(productId, promoCode));
     }
 }
