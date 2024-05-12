@@ -34,7 +34,7 @@ public class PurchaseRepositoryTests {
     public void givenExistingPurchases_whenGenerateSalesReport_thenReturnSalesReportList() {
         // given
         Product product = createTestProduct("TestProduct1", "This is test product 1", new BigDecimal("50.00"), "USD");
-        PromoCode promoCode = createPromoCode("Discount123", DiscountType.FIXED, BigDecimal.valueOf(20), "USD", 5, 1);
+        PromoCode promoCode = createPromoCode("Discount123", BigDecimal.valueOf(20), "USD");
         Purchase purchase1 = createPurchase(LocalDateTime.now(), new BigDecimal("50.00"), new BigDecimal("10.00"), product, promoCode);
         Purchase purchase2 = createPurchase(LocalDateTime.now(), new BigDecimal("100.00"), new BigDecimal("20.00"), product, promoCode);
 
@@ -57,8 +57,8 @@ public class PurchaseRepositoryTests {
         Product product1 = createTestProduct("TestProduct2", "This is test product 2", new BigDecimal("200.00"), "USD");
         Product product2 = createTestProduct("TestProduct3", "This is test product 3", new BigDecimal("300.00"), "EUR");
 
-        PromoCode promoCode1 = createPromoCode("Discount123", DiscountType.FIXED, BigDecimal.valueOf(20), "USD", 5, 1);
-        PromoCode promoCode2 = createPromoCode("Discount1234", DiscountType.FIXED, BigDecimal.valueOf(20), "EUR", 5, 1);
+        PromoCode promoCode1 = createPromoCode("Discount123", BigDecimal.valueOf(20), "USD");
+        PromoCode promoCode2 = createPromoCode("Discount1234", BigDecimal.valueOf(20), "EUR");
 
         Purchase purchase1 = createPurchase(LocalDateTime.now(), new BigDecimal("200.00"), new BigDecimal("25.00"), product1, promoCode1);
         Purchase purchase2 = createPurchase(LocalDateTime.now(), new BigDecimal("300.00"), new BigDecimal("30.00"), product2, promoCode2);
@@ -100,15 +100,15 @@ public class PurchaseRepositoryTests {
         return productRepository.save(product);
     }
 
-    private PromoCode createPromoCode(String code, DiscountType type, BigDecimal discountValue, String currencyCode, int limit, int minItems) {
+    private PromoCode createPromoCode(String code, BigDecimal discountValue, String currencyCode) {
         PromoCode promoCode = new PromoCode(
-                type,
+                DiscountType.FIXED,
                 code,
                 LocalDateTime.now().plusDays(1),
                 discountValue,
                 Currency.getInstance(currencyCode),
-                limit,
-                minItems
+                5,
+                1
         );
         return promoCodeRepository.save(promoCode);
     }
