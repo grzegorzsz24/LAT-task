@@ -48,6 +48,7 @@ public class PromoCodeServiceTest {
 
     @Test
     public void givenNewPromoCode_whenSavePromoCode_thenPromoCodeIsSaved() {
+        //given
         PromoCodeRequest request = new PromoCodeRequest();
         request.setCode("SAVE10");
         request.setExpirationDate(LocalDateTime.now().plusDays(10));
@@ -67,19 +68,24 @@ public class PromoCodeServiceTest {
         when(promoCodeRepository.save(promoCode)).thenReturn(promoCode);
         when(PromoCodeMapper.mapToResponse(promoCode)).thenReturn(expectedResponse);
 
+        //when
         PromoCodeResponse actualResponse = promoCodeService.savePromoCode(request);
 
+        //then
         assertThat(actualResponse.getCode()).isEqualTo(expectedResponse.getCode());
         verify(promoCodeRepository).save(promoCode);
     }
 
     @Test
     public void givenExistingPromoCode_whenSavePromoCode_thenThrowBadRequestException() {
+        //given
         PromoCodeRequest request = new PromoCodeRequest();
         request.setCode("SAVE10");
 
         when(promoCodeRepository.findByCode("SAVE10")).thenReturn(Optional.of(new PromoCode()));
 
+        //when
+        //then
         assertThatThrownBy(() -> promoCodeService.savePromoCode(request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("already exists");
@@ -87,20 +93,24 @@ public class PromoCodeServiceTest {
 
     @Test
     public void whenGetAllPromoCodes_thenAllPromoCodesAreReturned() {
+        //given
         List<PromoCode> promoCodes = Arrays.asList(new PromoCode(), new PromoCode());
         List<PromoCodeResponse> expectedResponses = Arrays.asList(new PromoCodeResponse(), new PromoCodeResponse());
 
         when(promoCodeRepository.findAll()).thenReturn(promoCodes);
         when(PromoCodeMapper.mapToResponse(any(PromoCode.class))).thenReturn(expectedResponses.get(0), expectedResponses.get(1));
 
+        //when
         List<PromoCodeResponse> actualResponses = promoCodeService.getAllPromoCodes();
 
+        //then
         assertThat(actualResponses).hasSize(2);
         verify(promoCodeRepository).findAll();
     }
 
     @Test
     public void givenValidCode_whenGetPromoCodeDetailsByCode_thenPromoCodeDetailsAreReturned() {
+        //given
         PromoCode promoCode = new PromoCode();
         promoCode.setCode("SAVE10");
         PromoCodeResponse expectedResponse = new PromoCodeResponse();
@@ -109,15 +119,20 @@ public class PromoCodeServiceTest {
         when(promoCodeRepository.findByCode("SAVE10")).thenReturn(Optional.of(promoCode));
         when(PromoCodeMapper.mapToResponse(promoCode)).thenReturn(expectedResponse);
 
+        //when
         PromoCodeResponse actualResponse = promoCodeService.getPromoCodeDetailsByCode("SAVE10");
 
+        //then
         assertThat(actualResponse.getCode()).isEqualTo("SAVE10");
     }
 
     @Test
     public void givenInvalidCode_whenGetPromoCodeDetailsByCode_thenThrowResourceNotFoundException() {
+        //given
         when(promoCodeRepository.findByCode("INVALID")).thenReturn(Optional.empty());
 
+        //when
+        //then
         assertThatThrownBy(() -> promoCodeService.getPromoCodeDetailsByCode("INVALID"))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("not found");
