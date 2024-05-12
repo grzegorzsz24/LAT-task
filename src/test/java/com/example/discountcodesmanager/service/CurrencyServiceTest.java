@@ -2,6 +2,8 @@ package com.example.discountcodesmanager.service;
 
 import com.example.discountcodesmanager.exception.BadRequestException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Currency;
 import java.util.Optional;
@@ -9,6 +11,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@ExtendWith(MockitoExtension.class)
 public class CurrencyServiceTest {
     @Test
     public void whenValidCurrencyCode_thenCurrencyIsReturned() {
