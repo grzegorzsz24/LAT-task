@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-public class PurchaseRepositoryTests {
+public class PurchaseRepositoryTest {
     @Autowired
     private PurchaseRepository purchaseRepository;
     @Autowired
