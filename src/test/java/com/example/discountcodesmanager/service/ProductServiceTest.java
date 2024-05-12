@@ -31,7 +31,6 @@ public class ProductServiceTest {
     private ProductMapper productMapper;
     private MockedStatic<ProductMapper> mockedProductMapper;
 
-
     @InjectMocks
     private ProductService productService;
 
