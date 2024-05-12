@@ -26,7 +26,10 @@ public class PromoCode {
     private Integer maxUsages;
     private Integer currentUsages;
 
-    public PromoCode(DiscountType discountType, String code, LocalDateTime expirationDate, BigDecimal discountAmount, Currency discountCurrency, Integer maxUsages, Integer currentUsages) {
+
+    public PromoCode(DiscountType discountType, String code,
+                     LocalDateTime expirationDate, BigDecimal discountAmount,
+                     Currency discountCurrency, Integer maxUsages, Integer currentUsages) {
         this.discountType = discountType;
         this.code = code;
         this.expirationDate = expirationDate;

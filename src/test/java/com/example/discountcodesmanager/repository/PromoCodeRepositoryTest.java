@@ -31,7 +31,7 @@ public class PromoCodeRepositoryTest {
         PromoCode promoCode = new PromoCode(
                 DiscountType.FIXED,
                 code,
-                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(1),
                 BigDecimal.valueOf(20),
                 Currency.getInstance("USD"),
                 5,
