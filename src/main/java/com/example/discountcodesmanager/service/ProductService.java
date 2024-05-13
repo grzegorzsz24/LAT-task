@@ -47,10 +47,10 @@ public class ProductService {
         );
     }
 
-    public void updateProduct(ProductRequest productToUpdate) {
+    public void updateProduct(ProductRequest productToUpdate, String oldName) {
         Product product = productMapper.mapFromRequest(productToUpdate);
-        product.setId(productRepository.findByName(productToUpdate.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + productToUpdate.getName() + ", not found"))
+        product.setId(productRepository.findByName(oldName)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with name: " + productToUpdate.getName() + ", not found"))
                 .getId());
         productRepository.save(product);
     }
@@ -59,7 +59,7 @@ public class ProductService {
         ProductResponse productResponse = findProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + ", not found"));
         ProductRequest patchedProductRequest = applyPatch(productResponse, patch);
-        updateProduct(patchedProductRequest);
+        updateProduct(patchedProductRequest, productResponse.getName());
     }
 
     private ProductRequest applyPatch(ProductResponse product, JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {
