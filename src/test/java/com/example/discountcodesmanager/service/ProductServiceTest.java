@@ -165,7 +165,7 @@ public class ProductServiceTest {
         when(productRepository.save(updatedProduct)).thenReturn(updatedProduct);
 
         //when
-        productService.updateProduct(productRequest);
+        productService.updateProduct(productRequest, existingProduct.getName());
 
         //then
         verify(productRepository).save(updatedProduct);
@@ -184,7 +184,7 @@ public class ProductServiceTest {
 
         //when
         //then
-        assertThatThrownBy(() -> productService.updateProduct(productRequest))
+        assertThatThrownBy(() -> productService.updateProduct(productRequest, "Empty"))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("not found");
     }
