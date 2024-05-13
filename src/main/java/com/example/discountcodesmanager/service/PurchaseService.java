@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -97,7 +98,7 @@ public class PurchaseService {
         }
 
         Purchase purchase = new Purchase();
-        purchase.setPurchaseDate(LocalDateTime.now());
+        purchase.setPurchaseDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         purchase.setRegularPrice(product.getRegularPrice());
         purchase.setDiscountApplied(discountApplied);
         purchase.setProduct(product);
