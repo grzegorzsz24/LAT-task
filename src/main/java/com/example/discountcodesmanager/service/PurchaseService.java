@@ -12,6 +12,7 @@ import com.example.discountcodesmanager.model.Purchase;
 import com.example.discountcodesmanager.repository.ProductRepository;
 import com.example.discountcodesmanager.repository.PromoCodeRepository;
 import com.example.discountcodesmanager.repository.PurchaseRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,7 @@ public class PurchaseService {
 
     }
 
+    @Transactional
     public PurchaseResponse createPurchase(Long productId, String promoCode) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with id: " + productId + ", not found"));
