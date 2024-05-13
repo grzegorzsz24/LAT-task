@@ -125,10 +125,7 @@ To clone the repository and get started with the project, follow these steps:
   ```http
   GET http://localhost:8080/purchases/discount-price?productId=6&promoCode=1234567
   ```
-
-  productId=6&promoCode=1234567
-  ```
-
+  
 - **Simulate a Purchase**:
   ```http
   POST http://localhost:8080/purchases
