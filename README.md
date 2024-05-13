@@ -123,8 +123,8 @@ To clone the repository and get started with the project, follow these steps:
 
 - **Get Discount Price with a Promo Code**:
   ```http
-  GET http://localhost:8080/purchases/discount-price
-  Content-Type: application/x-www-form-urlencoded
+  GET http://localhost:8080/purchases/discount-price?productId=6&promoCode=1234567
+  ```
 
   productId=6&promoCode=1234567
   ```
