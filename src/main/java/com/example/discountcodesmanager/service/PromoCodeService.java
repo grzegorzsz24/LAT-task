@@ -6,6 +6,7 @@ import com.example.discountcodesmanager.exception.BadRequestException;
 import com.example.discountcodesmanager.exception.ResourceNotFoundException;
 import com.example.discountcodesmanager.mapper.PromoCodeMapper;
 import com.example.discountcodesmanager.repository.PromoCodeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class PromoCodeService {
     private final PromoCodeRepository promoCodeRepository;
     private final PromoCodeMapper promoCodeMapper;
 
+    @Transactional
     public PromoCodeResponse savePromoCode(PromoCodeRequest promoCode) {
         if (promoCodeRepository.findByCode(promoCode.getCode()).isPresent()) {
             throw new BadRequestException("Promo code: " + promoCode.getCode() + ", already exists");

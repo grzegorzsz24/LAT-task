@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class ProductService {
     private final ObjectMapper objectMapper;
     private final ProductMapper productMapper;
 
+    @Transactional
     public ProductResponse saveProduct(ProductRequest product) {
         if (productRepository.findByName(product.getName()).isPresent()) {
             throw new BadRequestException("Product with name: " + product.getName() + ", already exists");
@@ -47,6 +49,7 @@ public class ProductService {
         );
     }
 
+    @Transactional
     public void updateProduct(ProductRequest productToUpdate, String oldName) {
         Product product = productMapper.mapFromRequest(productToUpdate);
         product.setId(productRepository.findByName(oldName)
